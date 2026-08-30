@@ -1,0 +1,1105 @@
+{
+  "summary": {
+    "total_orders": 61,
+    "clean_matches": 49,
+    "match_rate": 0.8033,
+    "total_order_value": 803281.65,
+    "reconciled_value": 628892.26,
+    "reconciled_value_pct": 0.7829,
+    "total_exceptions": 20,
+    "exception_breakdown": {
+      "on_hold": 3,
+      "tds_mismatch": 3,
+      "refund_clawback_timing": 4,
+      "duplicate_settlement": 2,
+      "fee_drift": 3,
+      "split_settlement": 2,
+      "unclassified_discrepancy": 1,
+      "orphan_bank_credit": 2
+    },
+    "orphan_bank_credits": 2
+  },
+  "orders": [
+    {
+      "order_id": "order_7235e9706a714c",
+      "gross_amount": 13493.25,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 13161.31,
+      "recomputed_net": 13161.31,
+      "bank_credit_total": 13161.31,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_a70042a53fc34f"
+      ]
+    },
+    {
+      "order_id": "order_8bc50f3b609d42",
+      "gross_amount": 23157.16,
+      "channel": "online_domestic",
+      "clean_match": false,
+      "actual_net": 22587.49,
+      "recomputed_net": 22587.49,
+      "bank_credit_total": 0.0,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": -22587.49,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_1c312874ee0e46"
+      ]
+    },
+    {
+      "order_id": "order_1d7b13f9cff04d",
+      "gross_amount": 19467.2,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 18988.31,
+      "recomputed_net": 18988.31,
+      "bank_credit_total": 18988.31,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_48ba883eac4f45"
+      ]
+    },
+    {
+      "order_id": "order_25d2f076790c4e",
+      "gross_amount": 1934.86,
+      "channel": "pos",
+      "clean_match": false,
+      "actual_net": 1888.22,
+      "recomputed_net": 1887.26,
+      "bank_credit_total": 1888.22,
+      "delta_net_vs_recomputed": 0.96,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_a750a2a53cec4a"
+      ]
+    },
+    {
+      "order_id": "order_6caca84f5bd54b",
+      "gross_amount": 22151.67,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 16091.0,
+      "recomputed_net": 16091.02,
+      "bank_credit_total": 16091.0,
+      "delta_net_vs_recomputed": -0.02,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_50ea82334bb646"
+      ]
+    },
+    {
+      "order_id": "order_b2c70ea10b5547",
+      "gross_amount": 6789.72,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 6622.7,
+      "recomputed_net": 6622.7,
+      "bank_credit_total": 6622.7,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_b30e077f99864a"
+      ]
+    },
+    {
+      "order_id": "order_4020c09935864f",
+      "gross_amount": 5717.22,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 5576.58,
+      "recomputed_net": 5576.58,
+      "bank_credit_total": 5576.58,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_975724078bc941"
+      ]
+    },
+    {
+      "order_id": "order_cc51c17140a549",
+      "gross_amount": 21569.24,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 21038.64,
+      "recomputed_net": 21038.64,
+      "bank_credit_total": 21038.64,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_35c2f9504a034f"
+      ]
+    },
+    {
+      "order_id": "order_50a23fd58c684d",
+      "gross_amount": 15031.3,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 11447.580000000002,
+      "recomputed_net": 11447.58,
+      "bank_credit_total": 11447.58,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": -0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_b12f99e5e88442"
+      ]
+    },
+    {
+      "order_id": "order_0400aac29d8748",
+      "gross_amount": 24285.64,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 23688.21,
+      "recomputed_net": 23688.21,
+      "bank_credit_total": 23688.21,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_81b314a5a2fa46"
+      ]
+    },
+    {
+      "order_id": "order_1311354a175444",
+      "gross_amount": 13563.17,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 13229.52,
+      "recomputed_net": 13229.52,
+      "bank_credit_total": 13229.52,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_f73ec890d4984d"
+      ]
+    },
+    {
+      "order_id": "order_557eae65bde346",
+      "gross_amount": 4206.5,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 4103.02,
+      "recomputed_net": 4103.02,
+      "bank_credit_total": 4103.02,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_b59a0eb5890b44"
+      ]
+    },
+    {
+      "order_id": "order_d452dedc6ac747",
+      "gross_amount": 12664.48,
+      "channel": "pos",
+      "clean_match": false,
+      "actual_net": 24705.88,
+      "recomputed_net": 24705.87,
+      "bank_credit_total": 12352.94,
+      "delta_net_vs_recomputed": 0.01,
+      "delta_bank_vs_settlement": -12352.94,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_7b4b171c4a8e43",
+        "stl_0456de340d2e4c"
+      ]
+    },
+    {
+      "order_id": "order_f5c13904c6f147",
+      "gross_amount": 7671.59,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 7482.87,
+      "recomputed_net": 7482.87,
+      "bank_credit_total": 7482.87,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_c1008b4bca9b46"
+      ]
+    },
+    {
+      "order_id": "order_07ed6ee6f8db4d",
+      "gross_amount": 19134.02,
+      "channel": "pos",
+      "clean_match": false,
+      "actual_net": 18663.33,
+      "recomputed_net": 18663.33,
+      "bank_credit_total": 0.0,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": -18663.33,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_85cd32dc099f47"
+      ]
+    },
+    {
+      "order_id": "order_24c2f3a2a9794b",
+      "gross_amount": 12368.56,
+      "channel": "international_card",
+      "clean_match": false,
+      "actual_net": 12070.48,
+      "recomputed_net": 12064.29,
+      "bank_credit_total": 12070.48,
+      "delta_net_vs_recomputed": 6.19,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_10993f25dbeb46"
+      ]
+    },
+    {
+      "order_id": "order_00b00233bf8d4e",
+      "gross_amount": 6214.47,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 4693.82,
+      "recomputed_net": 4693.82,
+      "bank_credit_total": 4693.82,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_266d260289054e"
+      ]
+    },
+    {
+      "order_id": "order_b9172418eed44e",
+      "gross_amount": 2009.55,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 1538.19,
+      "recomputed_net": 1538.19,
+      "bank_credit_total": 1538.19,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_a4bc651e598b44"
+      ]
+    },
+    {
+      "order_id": "order_caec4d946f7d41",
+      "gross_amount": 6846.9,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 6678.46,
+      "recomputed_net": 6678.46,
+      "bank_credit_total": 6678.46,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_1efc9e31ecf647"
+      ]
+    },
+    {
+      "order_id": "order_919a6ec8fdca43",
+      "gross_amount": 18955.05,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 18488.75,
+      "recomputed_net": 18488.75,
+      "bank_credit_total": 18488.75,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_a623f03017a146"
+      ]
+    },
+    {
+      "order_id": "order_1db92872c0484c",
+      "gross_amount": 16351.99,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 15949.73,
+      "recomputed_net": 15949.73,
+      "bank_credit_total": 15949.73,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_c6cb85db69f24b"
+      ]
+    },
+    {
+      "order_id": "order_67f0df10c3624a",
+      "gross_amount": 1881.44,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 1835.16,
+      "recomputed_net": 1835.16,
+      "bank_credit_total": 1835.16,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_4ec78180b21e41"
+      ]
+    },
+    {
+      "order_id": "order_ec09f67d051749",
+      "gross_amount": 477.61,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 465.86,
+      "recomputed_net": 465.86,
+      "bank_credit_total": 465.86,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_19e277f3a4334b"
+      ]
+    },
+    {
+      "order_id": "order_d2f97438601045",
+      "gross_amount": 21532.99,
+      "channel": "pos",
+      "clean_match": false,
+      "actual_net": 20914.34,
+      "recomputed_net": 21003.28,
+      "bank_credit_total": 20914.34,
+      "delta_net_vs_recomputed": -88.94,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.0235,
+      "settlement_ids": [
+        "stl_ee76a705482941"
+      ]
+    },
+    {
+      "order_id": "order_e002ea4b0c734b",
+      "gross_amount": 13619.08,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 13284.05,
+      "recomputed_net": 13284.05,
+      "bank_credit_total": 13284.05,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_e8514e4556d548"
+      ]
+    },
+    {
+      "order_id": "order_67ed4d1f40a741",
+      "gross_amount": 20245.18,
+      "channel": "online_domestic",
+      "clean_match": false,
+      "actual_net": 32015.1,
+      "recomputed_net": 32015.09,
+      "bank_credit_total": 16007.55,
+      "delta_net_vs_recomputed": 0.01,
+      "delta_bank_vs_settlement": -16007.55,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_4ffbf89a9e8e48",
+        "stl_1f10dfc4783d4a"
+      ]
+    },
+    {
+      "order_id": "order_a03f7942b2924c",
+      "gross_amount": 11835.51,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 11544.35,
+      "recomputed_net": 11544.35,
+      "bank_credit_total": 11544.35,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_48c41c42a3c64f"
+      ]
+    },
+    {
+      "order_id": "order_050b194193114c",
+      "gross_amount": 1797.13,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 1752.92,
+      "recomputed_net": 1752.92,
+      "bank_credit_total": 1752.92,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_94aff5f6ffe843"
+      ]
+    },
+    {
+      "order_id": "order_0c2c657ebbc246",
+      "gross_amount": 11380.75,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 11100.78,
+      "recomputed_net": 11100.78,
+      "bank_credit_total": 11100.78,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_e737955fe7714a"
+      ]
+    },
+    {
+      "order_id": "order_29e40b197f9c44",
+      "gross_amount": 20258.15,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 14346.71,
+      "recomputed_net": 14346.71,
+      "bank_credit_total": 14346.71,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_0aef8f24a3334f"
+      ]
+    },
+    {
+      "order_id": "order_0bc20b8273b645",
+      "gross_amount": 24234.21,
+      "channel": "online_domestic",
+      "clean_match": false,
+      "actual_net": 23650.17,
+      "recomputed_net": 23638.06,
+      "bank_credit_total": 23650.17,
+      "delta_net_vs_recomputed": 12.11,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_889f76e219f94b"
+      ]
+    },
+    {
+      "order_id": "order_63efb7c849364d",
+      "gross_amount": 22590.34,
+      "channel": "international_card",
+      "clean_match": false,
+      "actual_net": 15429.57,
+      "recomputed_net": 15589.5,
+      "bank_credit_total": 15429.57,
+      "delta_net_vs_recomputed": -159.93,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.026,
+      "settlement_ids": [
+        "stl_1175f53029d74a"
+      ]
+    },
+    {
+      "order_id": "order_d8a7eb07b21842",
+      "gross_amount": 7345.66,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 6399.7,
+      "recomputed_net": 6399.7,
+      "bank_credit_total": 6399.7,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_02e377ca940c48"
+      ]
+    },
+    {
+      "order_id": "order_be6230ca624e42",
+      "gross_amount": 5677.21,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 5132.57,
+      "recomputed_net": 5132.57,
+      "bank_credit_total": 5132.57,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_4774d3a6d43c41"
+      ]
+    },
+    {
+      "order_id": "order_b04885561fe44c",
+      "gross_amount": 1711.98,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 1669.87,
+      "recomputed_net": 1669.87,
+      "bank_credit_total": 1669.87,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_133c702b1a2f4a"
+      ]
+    },
+    {
+      "order_id": "order_f06b1f1d06ac48",
+      "gross_amount": 4188.59,
+      "channel": "online_domestic",
+      "clean_match": false,
+      "actual_net": 3759.19,
+      "recomputed_net": 3776.49,
+      "bank_credit_total": 3759.19,
+      "delta_net_vs_recomputed": -17.3,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.0235,
+      "settlement_ids": [
+        "stl_36a586756d904a"
+      ]
+    },
+    {
+      "order_id": "order_4b54bd61fa0141",
+      "gross_amount": 10273.26,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 9212.09,
+      "recomputed_net": 9212.09,
+      "bank_credit_total": 9212.09,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_2e758cc2c10848"
+      ]
+    },
+    {
+      "order_id": "order_268dc78bc3684e",
+      "gross_amount": 16537.12,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 16130.31,
+      "recomputed_net": 16130.31,
+      "bank_credit_total": 16130.31,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_58f9073cacdc42"
+      ]
+    },
+    {
+      "order_id": "order_c950547e42764d",
+      "gross_amount": 16842.23,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 16427.92,
+      "recomputed_net": 16427.92,
+      "bank_credit_total": 16427.92,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_f54332e8a21b40"
+      ]
+    },
+    {
+      "order_id": "order_4fcd4e96134b4f",
+      "gross_amount": 16243.87,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 15844.27,
+      "recomputed_net": 15844.27,
+      "bank_credit_total": 15844.27,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_78da855ab2a14c"
+      ]
+    },
+    {
+      "order_id": "order_a7e4797634d54a",
+      "gross_amount": 530.09,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 451.0,
+      "recomputed_net": 451.0,
+      "bank_credit_total": 451.0,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_6ff6ef31cba244"
+      ]
+    },
+    {
+      "order_id": "order_6c3491ac6a0a47",
+      "gross_amount": 6850.45,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 6681.93,
+      "recomputed_net": 6681.93,
+      "bank_credit_total": 6681.93,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_e89ee686891f4d"
+      ]
+    },
+    {
+      "order_id": "order_b4100042ff994c",
+      "gross_amount": 4196.35,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 4093.11,
+      "recomputed_net": 4093.11,
+      "bank_credit_total": 4093.11,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_63a763a5f83641"
+      ]
+    },
+    {
+      "order_id": "order_0b08954bab3045",
+      "gross_amount": 20235.37,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 19737.57,
+      "recomputed_net": 19737.57,
+      "bank_credit_total": 19737.57,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_3771e5fbe0044e"
+      ]
+    },
+    {
+      "order_id": "order_ded14a57e5214f",
+      "gross_amount": 23314.37,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 22740.84,
+      "recomputed_net": 22740.84,
+      "bank_credit_total": 22740.84,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_a979d6815ef04f"
+      ]
+    },
+    {
+      "order_id": "order_7fe4523b2bf94f",
+      "gross_amount": 18637.69,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 18179.2,
+      "recomputed_net": 18179.21,
+      "bank_credit_total": 18179.2,
+      "delta_net_vs_recomputed": -0.01,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_8bcf2f4bd5ef4d",
+        "stl_48dd4bc619714d"
+      ]
+    },
+    {
+      "order_id": "order_800c14b591fb4c",
+      "gross_amount": 8769.14,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 8553.42,
+      "recomputed_net": 8553.42,
+      "bank_credit_total": 8553.42,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_ecf67c8c00f44f",
+        "stl_2d89f77a0b8243"
+      ]
+    },
+    {
+      "order_id": "order_56e809290cc648",
+      "gross_amount": 22731.53,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 22172.34,
+      "recomputed_net": 22172.34,
+      "bank_credit_total": 22172.34,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_79c9b9886b1c43"
+      ]
+    },
+    {
+      "order_id": "order_40b0333e788c42",
+      "gross_amount": 1388.94,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 1354.77,
+      "recomputed_net": 1354.77,
+      "bank_credit_total": 1354.77,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_de3fd139afda4d"
+      ]
+    },
+    {
+      "order_id": "order_1d4300653d3a48",
+      "gross_amount": 18608.4,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 16730.15,
+      "recomputed_net": 16730.15,
+      "bank_credit_total": 16730.15,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_39c4ac9ea25a4b"
+      ]
+    },
+    {
+      "order_id": "order_70f5b29341ac42",
+      "gross_amount": 22112.73,
+      "channel": "pos",
+      "clean_match": true,
+      "actual_net": 16913.92,
+      "recomputed_net": 16913.92,
+      "bank_credit_total": 16913.92,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_d0ea8e6e699349"
+      ]
+    },
+    {
+      "order_id": "order_2e07942edb0e49",
+      "gross_amount": 7913.98,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 7719.3,
+      "recomputed_net": 7719.3,
+      "bank_credit_total": 7719.3,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_03b2be4a237d44"
+      ]
+    },
+    {
+      "order_id": "order_2584c41e18d041",
+      "gross_amount": 2839.0,
+      "channel": "international_card",
+      "clean_match": false,
+      "actual_net": 2769.16,
+      "recomputed_net": 2769.16,
+      "bank_credit_total": 0.0,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": -2769.16,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_348af902b36e41"
+      ]
+    },
+    {
+      "order_id": "order_419c84eae33441",
+      "gross_amount": 23166.37,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 22596.47,
+      "recomputed_net": 22596.47,
+      "bank_credit_total": 22596.47,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_b458f948298d4a"
+      ]
+    },
+    {
+      "order_id": "order_3891a2324d0f41",
+      "gross_amount": 22070.98,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 21528.03,
+      "recomputed_net": 21528.03,
+      "bank_credit_total": 21528.03,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_c53c84c6d79a40"
+      ]
+    },
+    {
+      "order_id": "order_239264fc1c9e4e",
+      "gross_amount": 23291.15,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 22718.19,
+      "recomputed_net": 22718.19,
+      "bank_credit_total": 22718.19,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_667f0941641342"
+      ]
+    },
+    {
+      "order_id": "order_fdad12bd087e44",
+      "gross_amount": 9748.78,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 9508.96,
+      "recomputed_net": 9508.95,
+      "bank_credit_total": 9508.96,
+      "delta_net_vs_recomputed": 0.01,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_a313d51e954c41"
+      ]
+    },
+    {
+      "order_id": "order_3bf1962180e240",
+      "gross_amount": 8936.56,
+      "channel": "online_domestic",
+      "clean_match": true,
+      "actual_net": 7236.36,
+      "recomputed_net": 7236.36,
+      "bank_credit_total": 7236.36,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_4c289e1c928d49"
+      ]
+    },
+    {
+      "order_id": "order_018a759ce69646",
+      "gross_amount": 21649.52,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 21116.94,
+      "recomputed_net": 21116.94,
+      "bank_credit_total": 21116.94,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_b6bcc9d723e043"
+      ]
+    },
+    {
+      "order_id": "order_d2a554cfac1a4e",
+      "gross_amount": 24534.4,
+      "channel": "international_card",
+      "clean_match": true,
+      "actual_net": 21713.7,
+      "recomputed_net": 21713.7,
+      "bank_credit_total": 21713.7,
+      "delta_net_vs_recomputed": 0.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_2b04d203316d4d"
+      ]
+    },
+    {
+      "order_id": "order_edge_case_chargeback01",
+      "gross_amount": 9500.0,
+      "channel": "online_domestic",
+      "clean_match": false,
+      "actual_net": 8916.3,
+      "recomputed_net": 9266.3,
+      "bank_credit_total": 8916.3,
+      "delta_net_vs_recomputed": -350.0,
+      "delta_bank_vs_settlement": 0.0,
+      "observed_mdr": 0.02,
+      "settlement_ids": [
+        "stl_edge_case_01"
+      ]
+    }
+  ],
+  "exceptions": [
+    {
+      "order_id": "order_8bc50f3b609d42",
+      "kind": "on_hold",
+      "confidence": 1.0,
+      "financial_impact": 23157.16,
+      "detail": "Settlement marked on_hold by Razorpay risk review \u2014 funds not yet due to bank.",
+      "recommended_action": "No action needed yet; escalate to Razorpay support only if held > 7 days."
+    },
+    {
+      "order_id": "order_25d2f076790c4e",
+      "kind": "tds_mismatch",
+      "confidence": 0.9,
+      "financial_impact": 0.96,
+      "detail": "Expected TDS (194-O, 0.1%): \u20b91.93. Actual TDS deducted: \u20b90.97.",
+      "recommended_action": "Reconcile against Form 26AS at filing time; flag for CA review."
+    },
+    {
+      "order_id": "order_50a23fd58c684d",
+      "kind": "refund_clawback_timing",
+      "confidence": 1.0,
+      "financial_impact": 3213.95,
+      "detail": "Refund of \u20b93213.95 was issued but appears in a LATER settlement (stl_dd2ccb6b292f43), not the original payment's settlement.",
+      "recommended_action": "Match refund manually to the original order in the ledger; do not flag original settlement as short."
+    },
+    {
+      "order_id": "order_d452dedc6ac747",
+      "kind": "duplicate_settlement",
+      "confidence": 1.0,
+      "financial_impact": 12664.48,
+      "detail": "2 settlement rows found for one order; combined gross (\u20b925328.96) is ~2x the order's actual gross (\u20b912664.48).",
+      "recommended_action": "Verify with Razorpay this isn't a double-count; do not book both rows as revenue."
+    },
+    {
+      "order_id": "order_07ed6ee6f8db4d",
+      "kind": "on_hold",
+      "confidence": 1.0,
+      "financial_impact": 19134.02,
+      "detail": "Settlement marked on_hold by Razorpay risk review \u2014 funds not yet due to bank.",
+      "recommended_action": "No action needed yet; escalate to Razorpay support only if held > 7 days."
+    },
+    {
+      "order_id": "order_24c2f3a2a9794b",
+      "kind": "tds_mismatch",
+      "confidence": 0.9,
+      "financial_impact": 6.19,
+      "detail": "Expected TDS (194-O, 0.1%): \u20b912.37. Actual TDS deducted: \u20b96.18.",
+      "recommended_action": "Reconcile against Form 26AS at filing time; flag for CA review."
+    },
+    {
+      "order_id": "order_d2f97438601045",
+      "kind": "fee_drift",
+      "confidence": 0.95,
+      "financial_impact": 75.37,
+      "detail": "Contracted MDR: 2.00%. Observed MDR: 2.35%. Same rate seen on 2 settlement(s) in this batch.",
+      "recommended_action": "Raise with Razorpay account manager \u2014 check for an unannounced MDR slab change."
+    },
+    {
+      "order_id": "order_67ed4d1f40a741",
+      "kind": "duplicate_settlement",
+      "confidence": 1.0,
+      "financial_impact": 20245.18,
+      "detail": "2 settlement rows found for one order; combined gross (\u20b940490.36) is ~2x the order's actual gross (\u20b920245.18).",
+      "recommended_action": "Verify with Razorpay this isn't a double-count; do not book both rows as revenue."
+    },
+    {
+      "order_id": "order_0bc20b8273b645",
+      "kind": "tds_mismatch",
+      "confidence": 0.9,
+      "financial_impact": 12.11,
+      "detail": "Expected TDS (194-O, 0.1%): \u20b924.23. Actual TDS deducted: \u20b912.12.",
+      "recommended_action": "Reconcile against Form 26AS at filing time; flag for CA review."
+    },
+    {
+      "order_id": "order_63efb7c849364d",
+      "kind": "fee_drift",
+      "confidence": 0.75,
+      "financial_impact": 135.54,
+      "detail": "Contracted MDR: 2.00%. Observed MDR: 2.60%. Same rate seen on 1 settlement(s) in this batch.",
+      "recommended_action": "Raise with Razorpay account manager \u2014 check for an unannounced MDR slab change."
+    },
+    {
+      "order_id": "order_d8a7eb07b21842",
+      "kind": "refund_clawback_timing",
+      "confidence": 1.0,
+      "financial_impact": 765.26,
+      "detail": "Refund of \u20b9765.26 was issued but appears in a LATER settlement (stl_5e16689f569b46), not the original payment's settlement.",
+      "recommended_action": "Match refund manually to the original order in the ledger; do not flag original settlement as short."
+    },
+    {
+      "order_id": "order_be6230ca624e42",
+      "kind": "refund_clawback_timing",
+      "confidence": 1.0,
+      "financial_impact": 404.98,
+      "detail": "Refund of \u20b9404.98 was issued but appears in a LATER settlement (stl_f906fd6575f147), not the original payment's settlement.",
+      "recommended_action": "Match refund manually to the original order in the ledger; do not flag original settlement as short."
+    },
+    {
+      "order_id": "order_f06b1f1d06ac48",
+      "kind": "fee_drift",
+      "confidence": 0.95,
+      "financial_impact": 14.66,
+      "detail": "Contracted MDR: 2.00%. Observed MDR: 2.35%. Same rate seen on 2 settlement(s) in this batch.",
+      "recommended_action": "Raise with Razorpay account manager \u2014 check for an unannounced MDR slab change."
+    },
+    {
+      "order_id": "order_7fe4523b2bf94f",
+      "kind": "split_settlement",
+      "confidence": 0.95,
+      "financial_impact": 0.0,
+      "detail": "Order settled across 2 separate settlement rows (e.g. POS + online leg, or partial batch settlement).",
+      "recommended_action": "No fix needed \u2014 informational. Ensure downstream ledger sums all legs before comparing to bank."
+    },
+    {
+      "order_id": "order_800c14b591fb4c",
+      "kind": "split_settlement",
+      "confidence": 0.95,
+      "financial_impact": 0.0,
+      "detail": "Order settled across 2 separate settlement rows (e.g. POS + online leg, or partial batch settlement).",
+      "recommended_action": "No fix needed \u2014 informational. Ensure downstream ledger sums all legs before comparing to bank."
+    },
+    {
+      "order_id": "order_2584c41e18d041",
+      "kind": "on_hold",
+      "confidence": 1.0,
+      "financial_impact": 2839.0,
+      "detail": "Settlement marked on_hold by Razorpay risk review \u2014 funds not yet due to bank.",
+      "recommended_action": "No action needed yet; escalate to Razorpay support only if held > 7 days."
+    },
+    {
+      "order_id": "order_d2a554cfac1a4e",
+      "kind": "refund_clawback_timing",
+      "confidence": 1.0,
+      "financial_impact": 2217.16,
+      "detail": "Refund of \u20b92217.16 was issued but appears in a LATER settlement (stl_8c8fb4a5cbfc48), not the original payment's settlement.",
+      "recommended_action": "Match refund manually to the original order in the ledger; do not flag original settlement as short."
+    },
+    {
+      "order_id": "order_edge_case_chargeback01",
+      "kind": "unclassified_discrepancy",
+      "confidence": 0.3,
+      "financial_impact": 350.0,
+      "detail": "Order does not reconcile cleanly (net delta \u20b9-350.0, bank delta \u20b90.0) but doesn't match any known pattern.",
+      "recommended_action": "Needs manual review \u2014 does not fit an automated root-cause rule."
+    },
+    {
+      "order_id": "(none \u2014 bank-side only)",
+      "kind": "orphan_bank_credit",
+      "confidence": 0.7,
+      "financial_impact": 4654.7,
+      "detail": "Bank credit of \u20b94654.7 on 2026-08-15 (UTR utr_bad9ad7123784f) has no matching row in the Razorpay settlement report.",
+      "recommended_action": "Investigate \u2014 could be a manual payout, interest credit, or unreported settlement."
+    },
+    {
+      "order_id": "(none \u2014 bank-side only)",
+      "kind": "orphan_bank_credit",
+      "confidence": 0.7,
+      "financial_impact": 2434.04,
+      "detail": "Bank credit of \u20b92434.04 on 2026-08-02 (UTR utr_abf2ef2a7ff943) has no matching row in the Razorpay settlement report.",
+      "recommended_action": "Investigate \u2014 could be a manual payout, interest credit, or unreported settlement."
+    }
+  ]
+}

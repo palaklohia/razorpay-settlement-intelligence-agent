@@ -63,8 +63,37 @@ class DataGenerator:
 
     # ---------- core generation ----------
 
+    def _build_anomaly_plan(self) -> dict:
+        """
+        Pre-assign anomaly types to specific order indices so every category
+        in the taxonomy is GUARANTEED to appear at least MIN_PER_KIND times.
+        This makes the checked-in sample dataset reliable for demos and for
+        precision/recall scoring — coverage isn't left to chance.
+        """
+        kinds = [
+            "fee_drift", "tds_mismatch", "split_settlement",
+            "refund_clawback_timing", "on_hold", "orphan_bank_credit",
+            "duplicate_settlement", "rounding_noise",
+        ]
+        min_per_kind = 2
+        target_total = max(len(kinds) * min_per_kind, int(self.n * self.anomaly_rate))
+        target_total = min(target_total, self.n)  # can't exceed number of orders
+
+        plan_kinds = kinds * min_per_kind
+        while len(plan_kinds) < target_total:
+            plan_kinds.append(self.rng.choice(kinds))
+        plan_kinds = plan_kinds[:target_total]
+        self.rng.shuffle(plan_kinds)
+
+        indices = list(range(self.n))
+        self.rng.shuffle(indices)
+        chosen_indices = indices[:target_total]
+
+        return dict(zip(chosen_indices, plan_kinds))
+
     def generate(self):
         base_date = datetime(2026, 8, 1)
+        anomaly_plan = self._build_anomaly_plan()
 
         for i in range(self.n):
             order_id = self._new_id("order")
@@ -74,7 +103,12 @@ class DataGenerator:
             linked_account = (
                 self._new_id("acc") if self._maybe(0.15) else None
             )
-            refund_amount = money(gross * self.rng.uniform(0.05, 0.4)) if self._maybe(0.12) else 0.0
+            planned_kind = anomaly_plan.get(i)
+            # force a real refund whenever this order is planned for refund_clawback_timing
+            if planned_kind == "refund_clawback_timing":
+                refund_amount = money(gross * self.rng.uniform(0.05, 0.4))
+            else:
+                refund_amount = money(gross * self.rng.uniform(0.05, 0.4)) if self._maybe(0.12) else 0.0
 
             expected_settlement_date = order_date + timedelta(days=2 if channel != "international_card" else 4)
 
@@ -113,13 +147,9 @@ class DataGenerator:
             status = "settled"
             split = False
 
-            # ---------------- inject anomalies ----------------
-            if self._maybe(self.anomaly_rate):
-                kind = self.rng.choice([
-                    "fee_drift", "tds_mismatch", "split_settlement",
-                    "refund_clawback_timing", "on_hold", "orphan_bank_credit",
-                    "duplicate_settlement", "rounding_noise",
-                ])
+            # ---------------- inject anomalies (per pre-built plan) ----------------
+            if planned_kind is not None:
+                kind = planned_kind
 
                 if kind == "fee_drift":
                     drifted_mdr = CONTRACTED_MDR + self.rng.choice([0.0035, 0.006, -0.002])
