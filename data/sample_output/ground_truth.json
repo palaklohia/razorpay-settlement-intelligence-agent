@@ -1,0 +1,136 @@
+{
+  "total_orders": 60,
+  "total_anomalies_injected": 24,
+  "anomalies_by_type": {
+    "fee_drift": 4,
+    "orphan_bank_credit": 4,
+    "duplicate_settlement": 3,
+    "refund_clawback_timing": 3,
+    "split_settlement": 4,
+    "on_hold": 1,
+    "rounding_noise": 1,
+    "tds_mismatch": 4
+  },
+  "anomalies": [
+    {
+      "order_id": "order_442f75b0c7a141",
+      "kind": "fee_drift",
+      "detail": "contracted_mdr=0.02, observed_mdr=0.018"
+    },
+    {
+      "order_id": "order_144478074dfb4b",
+      "kind": "orphan_bank_credit",
+      "detail": "bank credit exists with no matching settlement report line"
+    },
+    {
+      "order_id": "order_76a165db9d8843",
+      "kind": "duplicate_settlement",
+      "detail": "settlement row duplicated (double count risk)"
+    },
+    {
+      "order_id": "order_d6c5268a4dca48",
+      "kind": "refund_clawback_timing",
+      "detail": "refund of 0.0 appears in a LATER settlement row"
+    },
+    {
+      "order_id": "order_57321d00c4f141",
+      "kind": "split_settlement",
+      "detail": "settled across two settlement rows"
+    },
+    {
+      "order_id": "order_823e1b0b31df44",
+      "kind": "duplicate_settlement",
+      "detail": "settlement row duplicated (double count risk)"
+    },
+    {
+      "order_id": "order_c062d91e98d043",
+      "kind": "fee_drift",
+      "detail": "contracted_mdr=0.02, observed_mdr=0.018"
+    },
+    {
+      "order_id": "order_4baf7b915c4648",
+      "kind": "split_settlement",
+      "detail": "settled across two settlement rows"
+    },
+    {
+      "order_id": "order_70e04ee4c1c646",
+      "kind": "on_hold",
+      "detail": "settlement withheld for risk review, not in bank yet"
+    },
+    {
+      "order_id": "order_823ca67c81a140",
+      "kind": "fee_drift",
+      "detail": "contracted_mdr=0.02, observed_mdr=0.018"
+    },
+    {
+      "order_id": "order_399b23d11b7443",
+      "kind": "rounding_noise",
+      "detail": "paisa-level rounding difference in fee"
+    },
+    {
+      "order_id": "order_abea98dc7c9a4a",
+      "kind": "duplicate_settlement",
+      "detail": "settlement row duplicated (double count risk)"
+    },
+    {
+      "order_id": "order_186ad368c15444",
+      "kind": "tds_mismatch",
+      "detail": "expected_tds=16.89, actual_tds=8.45"
+    },
+    {
+      "order_id": "order_d0620e76938d46",
+      "kind": "tds_mismatch",
+      "detail": "expected_tds=0.82, actual_tds=1.64"
+    },
+    {
+      "order_id": "order_003b7e01aa8645",
+      "kind": "split_settlement",
+      "detail": "settled across two settlement rows"
+    },
+    {
+      "order_id": "order_e472cd26c4554d",
+      "kind": "refund_clawback_timing",
+      "detail": "refund of 0.0 appears in a LATER settlement row"
+    },
+    {
+      "order_id": "order_3b1a5a0baf5d43",
+      "kind": "fee_drift",
+      "detail": "contracted_mdr=0.02, observed_mdr=0.018"
+    },
+    {
+      "order_id": "order_9c98513da8a94d",
+      "kind": "orphan_bank_credit",
+      "detail": "bank credit exists with no matching settlement report line"
+    },
+    {
+      "order_id": "order_1dbf6f399a994d",
+      "kind": "orphan_bank_credit",
+      "detail": "bank credit exists with no matching settlement report line"
+    },
+    {
+      "order_id": "order_ea7fd687f0de4e",
+      "kind": "orphan_bank_credit",
+      "detail": "bank credit exists with no matching settlement report line"
+    },
+    {
+      "order_id": "order_5e7c931e16e34c",
+      "kind": "tds_mismatch",
+      "detail": "expected_tds=1.33, actual_tds=0.67"
+    },
+    {
+      "order_id": "order_32413a97cd984f",
+      "kind": "split_settlement",
+      "detail": "settled across two settlement rows"
+    },
+    {
+      "order_id": "order_62157b59aebc44",
+      "kind": "refund_clawback_timing",
+      "detail": "refund of 0.0 appears in a LATER settlement row"
+    },
+    {
+      "order_id": "order_588ec4fc975447",
+      "kind": "tds_mismatch",
+      "detail": "expected_tds=23.5, actual_tds=11.75"
+    }
+  ]
+}
