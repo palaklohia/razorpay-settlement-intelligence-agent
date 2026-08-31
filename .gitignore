@@ -4,3 +4,6 @@ __pycache__/
 node_modules/
 .DS_Store
 data/generator/output/
+data/live_output/
+engine/report.json
+engine/scorecard.json
