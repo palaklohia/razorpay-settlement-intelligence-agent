@@ -31,6 +31,7 @@ sys.path.append(str(ENGINE_DIR))
 from reconcile import load_sources, reconcile, is_clean_match  # noqa: E402
 from exceptions import classify_batch, exceptions_to_dicts  # noqa: E402
 from waterfall import build_waterfall  # noqa: E402
+from explain import explain_order  # noqa: E402
 
 app = FastAPI(title="Razorpay Settlement Intelligence Agent")
 
@@ -62,7 +63,8 @@ def startup():
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok"}
+    import os
+    return {"status": "ok", "ai_explain_enabled": bool(os.environ.get("ANTHROPIC_API_KEY"))}
 
 
 @app.get("/api/report")
@@ -124,6 +126,29 @@ def get_waterfall(order_id: str):
         for e in exceptions if e.order_id == order_id
     ]
     return build_waterfall(rec, matching)
+
+
+@app.get("/api/orders/{order_id}/explain")
+def get_ai_explanation(order_id: str):
+    """
+    Calls Claude to turn the ALREADY VERIFIED waterfall + exceptions for this
+    order into a plain-English explanation. The verification itself never
+    touches this endpoint — it only explains what reconcile.py/exceptions.py
+    already determined deterministically.
+    """
+    results = _cache["results"]
+    exceptions = _cache["exceptions"]
+    rec = next((r for r in results if r.order_id == order_id), None)
+    if rec is None:
+        raise HTTPException(404, f"Order {order_id} not found")
+
+    matching = [
+        {"kind": e.kind, "confidence": e.confidence, "financial_impact": e.financial_impact,
+         "detail": e.detail, "recommended_action": e.recommended_action}
+        for e in exceptions if e.order_id == order_id
+    ]
+    wf = build_waterfall(rec, matching)
+    return explain_order(wf)
 
 
 @app.get("/api/scorecard")
