@@ -21,6 +21,24 @@ Click any order in the dashboard and watch the waterfall animate step by
 step, ending in a side-by-side comparison of expected vs actual settlement
 vs bank credit, plus any exception with a plain-English root cause.
 
+## Bonus features beyond the core reconciliation loop
+
+- **Cash forecast (`engine/forecast.py`, `GET /api/forecast`)** — projects next-7-day
+  expected inflow from money the engine has *already identified* as pending: held
+  settlements (release modeled over days 3-6, confidence 0.55) and settlements
+  reported by Razorpay but not yet seen in the bank statement (modeled to land
+  within days 1-2, confidence 0.85). This is derived arithmetic on already-verified
+  state, not a separate forecasting model — see the module docstring for the exact
+  methodology.
+- **AI-narrated exceptions (`engine/explain.py`, `GET /api/orders/{id}/explain`)** —
+  Claude turns an already-classified, already-confidence-scored finding into a
+  2-3 sentence plain-English explanation on request. It cannot change the
+  classification or any number — verification stays 100% deterministic.
+- **Command palette (⌘K in the frontend)** — jump to any order by ID or amount
+  without scrolling the ledger.
+- **Audit CSV export** — one-click download of the full exception list for
+  handoff to a CA or finance team.
+
 ## Architecture
 
 ```text

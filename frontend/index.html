@@ -266,6 +266,62 @@
   }
   .pipeline-note b { color: var(--text); }
 
+  /* ---------- FORECAST SECTION ---------- */
+  .forecast {
+    padding: 56px 48px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .forecast-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; margin-bottom: 8px; }
+  .forecast-total { font-family: 'Fraunces', serif; font-size: 42px; color: var(--gold); }
+  .forecast-total-label { color: var(--text-dim); font-size: 12px; margin-top: 4px; }
+  .forecast-methodology {
+    color: var(--text-dim);
+    font-size: 11px;
+    max-width: 560px;
+    line-height: 1.6;
+    margin: 18px 0 32px;
+    padding: 12px 16px;
+    border-left: 2px solid var(--gold);
+    background: var(--panel-raised);
+  }
+  .forecast-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    height: 180px;
+    padding: 0 4px;
+  }
+  .forecast-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .forecast-bar {
+    width: 100%;
+    background: var(--gold);
+    min-height: 2px;
+    transition: height 0.6s cubic-bezier(.2,.7,.3,1);
+    cursor: default;
+  }
+  .forecast-bar-amount { font-size: 10px; color: var(--text-dim); }
+  .forecast-bar-date { font-size: 10px; color: var(--text-dim); margin-top: 6px; }
+
+  /* torn ledger-tape edge */
+  .torn-edge {
+    height: 11px;
+    background-image:
+      linear-gradient(135deg, var(--bg) 6px, transparent 0),
+      linear-gradient(-135deg, var(--bg) 6px, transparent 0);
+    background-position: left bottom;
+    background-repeat: repeat-x;
+    background-size: 14px 14px;
+    background-color: var(--panel);
+  }
+
   /* ---------- CONTROL ROOM ---------- */
   .dashboard-heading {
     padding: 40px 48px 0;
@@ -446,6 +502,52 @@
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--hairline); }
+
+  /* ---------- COMMAND PALETTE ---------- */
+  .cmdk-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(27, 32, 51, 0.35);
+    z-index: 100;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12vh;
+  }
+  .cmdk-overlay.open { display: flex; }
+  .cmdk-box {
+    width: min(560px, 90vw);
+    background: var(--panel);
+    border: 1px solid var(--hairline);
+    box-shadow: 0 12px 40px rgba(27,32,51,0.18);
+  }
+  .cmdk-input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--hairline);
+    padding: 16px 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    background: transparent;
+    color: var(--text);
+  }
+  .cmdk-input:focus { outline: none; }
+  .cmdk-results { max-height: 320px; overflow-y: auto; }
+  .cmdk-result {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .cmdk-result:hover, .cmdk-result.selected { background: var(--panel-raised); }
+  .cmdk-hint { padding: 10px 20px; color: var(--text-dim); font-size: 11px; }
+
+  /* ---------- CONFIDENCE GAUGE ---------- */
+  .conf-gauge { display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; }
+  .conf-gauge svg { display: block; }
+  .conf-gauge-label { font-size: 11px; color: var(--text-dim); }
 </style>
 </head>
 <body>
@@ -458,6 +560,7 @@
   <nav class="masthead-nav">
     <a href="#overview">Overview</a>
     <a href="#pipeline">How it works</a>
+    <a href="#forecast">Forecast</a>
     <a href="#dashboard">Ledger</a>
   </nav>
 </header>
@@ -496,9 +599,28 @@
     <button id="btnRegenerate">Regenerate live batch</button>
     <input type="number" id="inputRecords" value="60" min="10" max="500" title="record count" />
     <button id="btnReset">Reset to sample data</button>
+    <button id="btnExport">Download audit CSV</button>
+    <button id="btnCmdk">Quick search ⌘K</button>
     <span class="api-status" id="apiStatus">connecting…</span>
   </div>
 </div>
+
+<div class="torn-edge"></div>
+
+<section class="forecast" id="forecast">
+  <div class="forecast-head">
+    <div>
+      <div class="pipeline-title">Cash forecast</div>
+      <div class="pipeline-sub" style="margin-bottom:0">Next 7 days — derived from held and in-transit settlements already identified above, not a separate guess.</div>
+    </div>
+    <div>
+      <div class="forecast-total num" id="forecastTotal">—</div>
+      <div class="forecast-total-label">total expected inflow</div>
+    </div>
+  </div>
+  <div class="forecast-methodology" id="forecastMethodology"></div>
+  <div class="forecast-chart" id="forecastChart"></div>
+</section>
 
 <section class="pipeline" id="pipeline">
   <div class="pipeline-title">How it reconciles</div>
@@ -552,6 +674,16 @@
       <p>Select any order on the left to see exactly where the money went — gross payment down to bank credit, one step at a time.</p>
     </div>
   </section>
+</div>
+
+<div class="torn-edge"></div>
+
+<div class="cmdk-overlay" id="cmdkOverlay">
+  <div class="cmdk-box">
+    <input type="text" class="cmdk-input" id="cmdkInput" placeholder="Search by order ID or amount…" />
+    <div class="cmdk-hint">↑↓ to navigate · Enter to open · Esc to close</div>
+    <div class="cmdk-results" id="cmdkResults"></div>
+  </div>
 </div>
 
 <footer>
@@ -609,13 +741,55 @@
     renderHero(currentReport.summary);
     renderDistribution(currentReport.summary);
     renderLedger();
+    loadForecast();
+  }
+
+  function animateCountUp(elNode, endValue, formatFn, duration = 900) {
+    const start = performance.now();
+    const startValue = 0;
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = startValue + (endValue - startValue) * eased;
+      elNode.innerHTML = formatFn(current);
+      if (progress < 1) requestAnimationFrame(tick);
+      else elNode.innerHTML = formatFn(endValue);
+    }
+    requestAnimationFrame(tick);
   }
 
   function renderHero(s) {
-    el('matchRateNumber').innerHTML = (s.match_rate * 100).toFixed(1) + '<sup>%</sup>';
-    el('statReconciled').textContent = inrShort(s.reconciled_value);
-    el('statOrders').textContent = s.total_orders;
-    el('statExceptions').textContent = s.total_exceptions;
+    animateCountUp(el('matchRateNumber'), s.match_rate * 100, (v) => v.toFixed(1) + '<sup>%</sup>');
+    animateCountUp(el('statReconciled'), s.reconciled_value, (v) => inrShort(v));
+    animateCountUp(el('statOrders'), s.total_orders, (v) => Math.round(v).toString());
+    animateCountUp(el('statExceptions'), s.total_exceptions, (v) => Math.round(v).toString());
+  }
+
+  async function loadForecast() {
+    try {
+      const r = await fetch(`${API_BASE}/api/forecast`);
+      const data = await r.json();
+      renderForecast(data);
+    } catch (e) { /* forecast is a bonus view; fail quietly if unavailable */ }
+  }
+
+  function renderForecast(data) {
+    el('forecastTotal').textContent = inrShort(data.total_expected_inflow);
+    el('forecastMethodology').textContent = data.methodology + ` (as of ${data.as_of})`;
+
+    const maxAmount = Math.max(...data.days.map(d => d.expected_amount), 1);
+    const chartHtml = data.days.map(d => {
+      const heightPct = Math.max((d.expected_amount / maxAmount) * 100, d.expected_amount > 0 ? 3 : 0);
+      const opacity = d.confidence ? (0.4 + d.confidence * 0.6).toFixed(2) : 0.15;
+      const shortDate = new Date(d.date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+      return `
+        <div class="forecast-bar-wrap">
+          <div class="forecast-bar-amount num">${d.expected_amount > 0 ? inrShort(d.expected_amount) : ''}</div>
+          <div class="forecast-bar" style="height:${heightPct}%; opacity:${opacity}" title="${shortDate}: ${inr(d.expected_amount)} · confidence ${d.confidence ? (d.confidence*100).toFixed(0)+'%' : 'n/a'}"></div>
+          <div class="forecast-bar-date">${shortDate}</div>
+        </div>`;
+    }).join('');
+    el('forecastChart').innerHTML = chartHtml;
   }
 
   function renderDistribution(summary) {
@@ -705,6 +879,22 @@
     renderWaterfall(data);
   }
 
+  function confidenceGauge(confidence) {
+    const r = 9, circumference = 2 * Math.PI * r;
+    const offset = circumference * (1 - confidence);
+    const color = confidence >= 0.8 ? 'var(--green)' : confidence >= 0.5 ? 'var(--gold)' : 'var(--coral)';
+    return `
+      <span class="conf-gauge">
+        <svg width="22" height="22" viewBox="0 0 22 22">
+          <circle cx="11" cy="11" r="${r}" fill="none" stroke="var(--hairline)" stroke-width="2.5" />
+          <circle cx="11" cy="11" r="${r}" fill="none" stroke="${color}" stroke-width="2.5"
+            stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
+            transform="rotate(-90 11 11)" stroke-linecap="round" />
+        </svg>
+        <span class="conf-gauge-label">${(confidence * 100).toFixed(0)}%</span>
+      </span>`;
+  }
+
   function renderWaterfall(data) {
     const maxAmount = Math.max(...data.steps.map(s => Math.abs(s.running_total)), data.expected_net);
 
@@ -750,7 +940,7 @@
               </div>
               <div class="exception-detail">${e.detail}</div>
               <div class="exception-meta">
-                <span>confidence ${(e.confidence * 100).toFixed(0)}%</span>
+                <span class="conf-wrap">${confidenceGauge(e.confidence)}</span>
                 <span>impact ${inr(e.financial_impact)}</span>
               </div>
               <div class="exception-action">→ ${e.recommended_action}</div>
@@ -824,6 +1014,101 @@
     activeOrderId = null;
     el('waterfallPanel').innerHTML = `<div class="empty-state"><div class="big">Explain this ₹</div><p>Select any order on the left to see exactly where the money went.</p></div>`;
     await loadReport();
+  });
+
+  // ---------- CSV export ----------
+  el('btnExport').addEventListener('click', () => {
+    if (!currentReport) return;
+    const rows = [['order_id', 'kind', 'confidence', 'financial_impact', 'detail', 'recommended_action']];
+    currentReport.exceptions.forEach(e => {
+      rows.push([e.order_id, e.kind, e.confidence, e.financial_impact,
+        `"${e.detail.replace(/"/g, '""')}"`, `"${e.recommended_action.replace(/"/g, '""')}"`]);
+    });
+    const csv = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'settlement_exceptions_audit.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ---------- command palette ----------
+  let cmdkSelectedIndex = 0;
+  let cmdkMatches = [];
+
+  function openCmdk() {
+    el('cmdkOverlay').classList.add('open');
+    el('cmdkInput').value = '';
+    el('cmdkInput').focus();
+    renderCmdkResults('');
+  }
+  function closeCmdk() {
+    el('cmdkOverlay').classList.remove('open');
+  }
+  function renderCmdkResults(query) {
+    if (!currentReport) { cmdkMatches = []; el('cmdkResults').innerHTML = ''; return; }
+    const q = query.trim().toLowerCase();
+    let matches = currentReport.orders;
+    if (q) {
+      matches = currentReport.orders.filter(o =>
+        o.order_id.toLowerCase().includes(q) || String(o.gross_amount).includes(q)
+      );
+    }
+    cmdkMatches = matches.slice(0, 8);
+    cmdkSelectedIndex = 0;
+    el('cmdkResults').innerHTML = cmdkMatches.map((o, i) => `
+      <div class="cmdk-result${i === 0 ? ' selected' : ''}" data-order-id="${o.order_id}" data-index="${i}">
+        <span>${o.order_id}</span>
+        <span class="num">${inr(o.gross_amount)}</span>
+      </div>`).join('') || `<div class="cmdk-hint">No matching orders.</div>`;
+
+    document.querySelectorAll('.cmdk-result').forEach(node => {
+      node.addEventListener('click', () => {
+        selectOrder(node.dataset.orderId);
+        closeCmdk();
+        document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  }
+
+  el('btnCmdk').addEventListener('click', openCmdk);
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      openCmdk();
+      return;
+    }
+    if (!el('cmdkOverlay').classList.contains('open')) return;
+    if (e.key === 'Escape') { closeCmdk(); return; }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      cmdkSelectedIndex = Math.min(cmdkSelectedIndex + 1, cmdkMatches.length - 1);
+      updateCmdkSelection();
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      cmdkSelectedIndex = Math.max(cmdkSelectedIndex - 1, 0);
+      updateCmdkSelection();
+    }
+    if (e.key === 'Enter' && cmdkMatches[cmdkSelectedIndex]) {
+      selectOrder(cmdkMatches[cmdkSelectedIndex].order_id);
+      closeCmdk();
+      document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  function updateCmdkSelection() {
+    document.querySelectorAll('.cmdk-result').forEach((node, i) => {
+      node.classList.toggle('selected', i === cmdkSelectedIndex);
+    });
+  }
+
+  el('cmdkInput').addEventListener('input', (e) => renderCmdkResults(e.target.value));
+  el('cmdkOverlay').addEventListener('click', (e) => {
+    if (e.target.id === 'cmdkOverlay') closeCmdk();
   });
 
   loadReport();
