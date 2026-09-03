@@ -74,6 +74,59 @@
   .hero {
     padding: 64px 48px 40px;
     border-bottom: 1px solid var(--hairline);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* floating gradient blobs, purely decorative, constant slow drift */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { width: 340px; height: 340px; background: radial-gradient(circle, #E8C77A, transparent 70%); top: -80px; right: 8%; animation: drift1 14s ease-in-out infinite; }
+  .blob-2 { width: 260px; height: 260px; background: radial-gradient(circle, #D89393, transparent 70%); bottom: -60px; left: 4%; animation: drift2 18s ease-in-out infinite; }
+  .blob-3 { width: 200px; height: 200px; background: radial-gradient(circle, #8FA9C9, transparent 70%); top: 30%; right: 28%; animation: drift3 16s ease-in-out infinite; }
+
+  @keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-30px, 40px) scale(1.12); } }
+  @keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px, -20px) scale(1.08); } }
+  @keyframes drift3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-20px, -30px) scale(0.92); } }
+
+  /* floating rupee particles */
+  .particle {
+    position: absolute;
+    color: var(--gold);
+    opacity: 0;
+    font-family: 'Fraunces', serif;
+    pointer-events: none;
+    z-index: 0;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.25; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(-420px) rotate(12deg); opacity: 0; }
+  }
+
+  .hero > *:not(.blob):not(.particle) { position: relative; z-index: 1; }
+
+  /* shimmering gradient text for the hero number */
+  .hero-number {
+    background: linear-gradient(100deg, var(--text) 30%, var(--gold) 45%, var(--text) 60%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 5s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+    100% { background-position: 0% center; }
   }
 
   .hero-eyebrow {
@@ -265,6 +318,88 @@
     line-height: 1.6;
   }
   .pipeline-note b { color: var(--text); }
+
+  /* ---------- MARQUEE TICKER ---------- */
+  .marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--panel-raised);
+    padding: 10px 0;
+  }
+  .marquee-track {
+    display: inline-block;
+    animation: marqueeScroll 26s linear infinite;
+  }
+  .marquee-track span {
+    display: inline-block;
+    padding: 0 28px;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.02em;
+  }
+  .marquee-track span b { color: var(--gold); font-weight: 500; }
+  @keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ---------- SPOTLIGHT BUTTONS ---------- */
+  button {
+    position: relative;
+    overflow: hidden;
+  }
+  button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120px circle at var(--mx, 50%) var(--my, 50%), rgba(169,114,46,0.22), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+  button:hover::before { opacity: 1; }
+  button:active { transform: scale(0.97); }
+  button {
+    transition: border-color 0.15s ease, color 0.15s ease, transform 0.12s ease;
+  }
+
+  /* ripple */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(169,114,46,0.35);
+    transform: scale(0);
+    animation: rippleAnim 0.6s ease-out;
+    pointer-events: none;
+  }
+  @keyframes rippleAnim {
+    to { transform: scale(3); opacity: 0; }
+  }
+
+  /* ---------- TILT CARDS (pipeline stages) ---------- */
+  .pipeline-stage {
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+  .pipeline-stage:hover {
+    box-shadow: 0 14px 30px rgba(27,32,51,0.10);
+    z-index: 2;
+  }
+
+  /* ---------- HOVER-LIFT for dynamic lists ---------- */
+  .ledger-row { transition: background 0.12s ease, transform 0.12s ease; }
+  .ledger-row:hover { transform: translateX(3px); }
+
+  .exception-card { transition: transform 0.15s ease, box-shadow 0.2s ease; }
+  .exception-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(178,59,59,0.10); }
+
+  .forecast-bar { transition: height 0.6s cubic-bezier(.2,.7,.3,1), opacity 0.2s ease, filter 0.2s ease; }
+  .forecast-bar-wrap:hover .forecast-bar { filter: brightness(1.15); }
+
+  .dist-segment { transition: opacity 0.15s ease, transform 0.15s ease; }
+  .dist-segment:hover { transform: scaleY(1.15); }
 
   /* ---------- FORECAST SECTION ---------- */
   .forecast {
@@ -499,6 +634,56 @@
     margin-top: 40px;
   }
 
+  /* ---------- SCROLL PAGING + REVEAL ---------- */
+  html { scroll-snap-type: y proximity; }
+  .page { min-height: 100vh; scroll-snap-align: start; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1);
+  }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  .reveal.delay-1 { transition-delay: 0.08s; }
+  .reveal.delay-2 { transition-delay: 0.16s; }
+  .reveal.delay-3 { transition-delay: 0.24s; }
+
+  /* side progress nav */
+  .side-nav {
+    position: fixed;
+    right: 26px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .side-nav-dot {
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--text-dim);
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .side-nav-dot.active { background: var(--gold); border-color: var(--gold); }
+  .side-nav-dot .side-nav-label {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+  }
+  .side-nav-dot:hover .side-nav-label { opacity: 1; }
+  @media (max-width: 900px) { .side-nav { display: none; } }
+
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--hairline); }
@@ -565,9 +750,24 @@
   </nav>
 </header>
 
-<div class="hero" id="overview">
-  <div class="hero-eyebrow">Reconciliation, not just matching</div>
-  <div class="hero-main">
+<nav class="side-nav" id="sideNav">
+  <div class="side-nav-dot" data-target="overview"><span class="side-nav-label">Overview</span></div>
+  <div class="side-nav-dot" data-target="pipeline"><span class="side-nav-label">How it works</span></div>
+  <div class="side-nav-dot" data-target="forecast"><span class="side-nav-label">Forecast</span></div>
+  <div class="side-nav-dot" data-target="dashboard"><span class="side-nav-label">Ledger</span></div>
+</nav>
+
+<div class="hero page" id="overview">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="particle" style="left:12%; font-size:22px; animation-duration:9s; animation-delay:0s;">₹</div>
+  <div class="particle" style="left:34%; font-size:16px; animation-duration:12s; animation-delay:2.5s;">₹</div>
+  <div class="particle" style="left:58%; font-size:26px; animation-duration:10s; animation-delay:1s;">₹</div>
+  <div class="particle" style="left:76%; font-size:18px; animation-duration:13s; animation-delay:4s;">₹</div>
+  <div class="particle" style="left:90%; font-size:20px; animation-duration:11s; animation-delay:6s;">₹</div>
+  <div class="hero-eyebrow reveal">Reconciliation, not just matching</div>
+  <div class="hero-main reveal">
     <div>
       <div class="hero-number num" id="matchRateNumber">—<sup>%</sup></div>
       <div class="hero-caption">of orders reconcile cleanly across ledger, settlement report, and bank statement</div>
@@ -588,13 +788,13 @@
     </div>
   </div>
 
-  <div class="dist-wrap">
+  <div class="dist-wrap reveal delay-1">
     <div class="dist-label">Exception distribution — click a category to filter the ledger below</div>
     <div class="dist-bar" id="distBar"></div>
     <div class="dist-legend" id="distLegend"></div>
   </div>
 
-  <div class="controls">
+  <div class="controls reveal delay-2">
     <button id="btnRefresh">Refresh</button>
     <button id="btnRegenerate">Regenerate live batch</button>
     <input type="number" id="inputRecords" value="60" min="10" max="500" title="record count" />
@@ -605,28 +805,17 @@
   </div>
 </div>
 
+<div class="marquee">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
 <div class="torn-edge"></div>
 
-<section class="forecast" id="forecast">
-  <div class="forecast-head">
-    <div>
-      <div class="pipeline-title">Cash forecast</div>
-      <div class="pipeline-sub" style="margin-bottom:0">Next 7 days — derived from held and in-transit settlements already identified above, not a separate guess.</div>
-    </div>
-    <div>
-      <div class="forecast-total num" id="forecastTotal">—</div>
-      <div class="forecast-total-label">total expected inflow</div>
-    </div>
-  </div>
-  <div class="forecast-methodology" id="forecastMethodology"></div>
-  <div class="forecast-chart" id="forecastChart"></div>
-</section>
+<section class="pipeline page" id="pipeline">
+  <div class="pipeline-title reveal">How it reconciles</div>
+  <div class="pipeline-sub reveal">Three independent sources, one deterministic engine — the classification is never a model's guess.</div>
 
-<section class="pipeline" id="pipeline">
-  <div class="pipeline-title">How it reconciles</div>
-  <div class="pipeline-sub">Three independent sources, one deterministic engine — the classification is never a model's guess.</div>
-
-  <div class="pipeline-flow">
+  <div class="pipeline-flow reveal delay-1">
     <div class="pipeline-stage">
       <div class="pipeline-stage-kicker">01 — Sources</div>
       <div class="pipeline-stage-title">Ledger · Settlement · Bank</div>
@@ -652,17 +841,32 @@
     </div>
   </div>
 
-  <div class="pipeline-note">
+  <div class="pipeline-note reveal delay-2">
     <b>Why this order matters:</b> verification (steps 02–03) is where trust is won or lost, so it stays 100% deterministic and auditable. The model only appears at step 04, explaining a finding that's already been proven correct — never deciding what's true.
   </div>
 </section>
 
-<div class="dashboard-heading">
+<section class="forecast page" id="forecast">
+  <div class="forecast-head reveal">
+    <div>
+      <div class="pipeline-title">Cash forecast</div>
+      <div class="pipeline-sub" style="margin-bottom:0">Next 7 days — derived from held and in-transit settlements already identified above, not a separate guess.</div>
+    </div>
+    <div>
+      <div class="forecast-total num" id="forecastTotal">—</div>
+      <div class="forecast-total-label">total expected inflow</div>
+    </div>
+  </div>
+  <div class="forecast-methodology reveal delay-1" id="forecastMethodology"></div>
+  <div class="forecast-chart reveal delay-2" id="forecastChart"></div>
+</section>
+
+<div class="dashboard-heading reveal">
   <div class="pipeline-title">Ledger &amp; "Explain this ₹"</div>
   <div class="pipeline-sub">Select any order to see exactly where the money went, one step at a time.</div>
 </div>
 
-<div class="control-room" id="dashboard">
+<div class="control-room page" id="dashboard">
   <aside class="ledger" id="ledger">
     <div class="ledger-header"><span>Order</span><span>Status</span></div>
     <div id="ledgerRows"></div>
@@ -768,28 +972,43 @@
   async function loadForecast() {
     try {
       const r = await fetch(`${API_BASE}/api/forecast`);
+      if (!r.ok) throw new Error(`forecast endpoint returned ${r.status}`);
       const data = await r.json();
+      if (!data || !Array.isArray(data.days)) throw new Error('malformed forecast response');
       renderForecast(data);
-    } catch (e) { /* forecast is a bonus view; fail quietly if unavailable */ }
+    } catch (e) {
+      renderForecastUnavailable(e.message);
+    }
+  }
+
+  function renderForecastUnavailable(reason) {
+    el('forecastTotal').textContent = '—';
+    el('forecastMethodology').textContent = '';
+    el('forecastChart').innerHTML = `<div class="empty-ledger">Forecast unavailable (${reason}). Make sure the API server has been restarted since forecast.py was added, then click Refresh.</div>`;
   }
 
   function renderForecast(data) {
-    el('forecastTotal').textContent = inrShort(data.total_expected_inflow);
-    el('forecastMethodology').textContent = data.methodology + ` (as of ${data.as_of})`;
+    try {
+      el('forecastTotal').textContent = inrShort(data.total_expected_inflow || 0);
+      el('forecastMethodology').textContent = (data.methodology || '') + (data.as_of ? ` (as of ${data.as_of})` : '');
 
-    const maxAmount = Math.max(...data.days.map(d => d.expected_amount), 1);
-    const chartHtml = data.days.map(d => {
-      const heightPct = Math.max((d.expected_amount / maxAmount) * 100, d.expected_amount > 0 ? 3 : 0);
-      const opacity = d.confidence ? (0.4 + d.confidence * 0.6).toFixed(2) : 0.15;
-      const shortDate = new Date(d.date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-      return `
-        <div class="forecast-bar-wrap">
-          <div class="forecast-bar-amount num">${d.expected_amount > 0 ? inrShort(d.expected_amount) : ''}</div>
-          <div class="forecast-bar" style="height:${heightPct}%; opacity:${opacity}" title="${shortDate}: ${inr(d.expected_amount)} · confidence ${d.confidence ? (d.confidence*100).toFixed(0)+'%' : 'n/a'}"></div>
-          <div class="forecast-bar-date">${shortDate}</div>
-        </div>`;
-    }).join('');
-    el('forecastChart').innerHTML = chartHtml;
+      const maxAmount = Math.max(...data.days.map(d => Number(d.expected_amount) || 0), 1);
+      const chartHtml = data.days.map(d => {
+        const amount = Number(d.expected_amount) || 0;
+        const heightPct = Math.max((amount / maxAmount) * 100, amount > 0 ? 3 : 0);
+        const opacity = d.confidence ? (0.4 + d.confidence * 0.6).toFixed(2) : 0.15;
+        const shortDate = new Date(d.date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+        return `
+          <div class="forecast-bar-wrap">
+            <div class="forecast-bar-amount num">${amount > 0 ? inrShort(amount) : ''}</div>
+            <div class="forecast-bar" style="height:${heightPct}%; opacity:${opacity}" title="${shortDate}: ${inr(amount)} · confidence ${d.confidence ? (d.confidence*100).toFixed(0)+'%' : 'n/a'}"></div>
+            <div class="forecast-bar-date">${shortDate}</div>
+          </div>`;
+      }).join('');
+      el('forecastChart').innerHTML = chartHtml;
+    } catch (e) {
+      renderForecastUnavailable('render error: ' + e.message);
+    }
   }
 
   function renderDistribution(summary) {
@@ -1112,6 +1331,83 @@
   });
 
   loadReport();
+
+  // ---------- marquee ticker ----------
+  (function initMarquee() {
+    const items = [
+      'gross → refund → fee → GST → TDS → transfer',
+      'fee drift', 'TDS mismatch', 'split settlement', 'refund clawback',
+      'on hold', 'orphan bank credit', 'duplicate settlement', 'unclassified — flagged, not guessed',
+      '80.3% match rate on 61 orders', 'precision 1.00 · recall 1.00 vs ground truth',
+    ];
+    const html = items.map(t => `<span><b>·</b> ${t}</span>`).join('');
+    el('marqueeTrack').innerHTML = html + html; // duplicated for seamless loop
+  })();
+
+  // ---------- spotlight buttons + ripple (event delegation covers dynamically-created buttons too) ----------
+  document.addEventListener('mousemove', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    btn.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+    btn.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+  });
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    const size = Math.max(rect.width, rect.height);
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 650);
+  });
+
+  // ---------- 3D tilt on pipeline stage cards ----------
+  document.querySelectorAll('.pipeline-stage').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `perspective(600px) rotateX(${(-py * 6).toFixed(2)}deg) rotateY(${(px * 6).toFixed(2)}deg) translateY(-2px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(600px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+
+  // ---------- scroll reveal ----------
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('in-view');
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(node => revealObserver.observe(node));
+
+  // ---------- side nav active-section tracking ----------
+  const sideNavDots = document.querySelectorAll('.side-nav-dot');
+  const pageSections = ['overview', 'pipeline', 'forecast', 'dashboard']
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        sideNavDots.forEach(dot => dot.classList.toggle('active', dot.dataset.target === entry.target.id));
+      }
+    });
+  }, { threshold: 0.5 });
+  pageSections.forEach(sec => navObserver.observe(sec));
+
+  sideNavDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const target = document.getElementById(dot.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
 </script>
 </body>
 </html>

@@ -32,6 +32,7 @@ from reconcile import load_sources, reconcile, is_clean_match  # noqa: E402
 from exceptions import classify_batch, exceptions_to_dicts  # noqa: E402
 from waterfall import build_waterfall  # noqa: E402
 from explain import explain_order  # noqa: E402
+from forecast import build_forecast  # noqa: E402
 
 app = FastAPI(title="Razorpay Settlement Intelligence Agent")
 
@@ -42,7 +43,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-_cache = {"results": None, "orphans": None, "exceptions": None, "bank_df": None, "payments": None}
+_cache = {"results": None, "orphans": None, "exceptions": None, "bank_df": None, "payments": None, "settlements_df": None}
 
 
 def _run_engine(data_dir: Path):
@@ -53,7 +54,8 @@ def _run_engine(data_dir: Path):
     )
     results, orphans = reconcile(payments, settlements, bank)
     exceptions = classify_batch(results, orphans, bank)
-    _cache.update({"results": results, "orphans": orphans, "exceptions": exceptions, "bank_df": bank, "payments": payments})
+    _cache.update({"results": results, "orphans": orphans, "exceptions": exceptions, "bank_df": bank,
+                    "payments": payments, "settlements_df": settlements})
 
 
 @app.on_event("startup")
@@ -149,6 +151,15 @@ def get_ai_explanation(order_id: str):
     ]
     wf = build_waterfall(rec, matching)
     return explain_order(wf)
+
+
+@app.get("/api/forecast")
+def get_forecast(horizon_days: int = 7):
+    results = _cache["results"]
+    settlements_df = _cache["settlements_df"]
+    if results is None or settlements_df is None:
+        raise HTTPException(500, "Engine not initialized")
+    return build_forecast(results, settlements_df, horizon_days=horizon_days)
 
 
 @app.get("/api/scorecard")
