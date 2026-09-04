@@ -21,6 +21,24 @@ Click any order in the dashboard and watch the waterfall animate step by
 step, ending in a side-by-side comparison of expected vs actual settlement
 vs bank credit, plus any exception with a plain-English root cause.
 
+## Testing
+
+```bash
+pip3 install pytest pandas
+python3 -m pytest tests/ -v
+```
+
+20 unit tests covering `reconcile.py` and `exceptions.py` independently of the
+synthetic data generator — clean matches, fee drift, on-hold, missing bank
+credit, orphan credits, duplicate vs. split settlement, TDS mismatch, and the
+`unclassified_discrepancy` safety net. One test documents a specific,
+non-obvious design decision worth knowing about: a tiny MDR deviation (0.02%)
+is correctly judged too small to call "fee_drift," but on a large enough
+order that same tiny rate difference can still exceed the rounding-noise
+ceiling in absolute rupees — the engine falls through to
+`unclassified_discrepancy` rather than either mislabeling it or silently
+absorbing it.
+
 ## Bonus features beyond the core reconciliation loop
 
 - **Cash forecast (`engine/forecast.py`, `GET /api/forecast`)** — projects next-7-day
@@ -34,6 +52,11 @@ vs bank credit, plus any exception with a plain-English root cause.
   Claude turns an already-classified, already-confidence-scored finding into a
   2-3 sentence plain-English explanation on request. It cannot change the
   classification or any number — verification stays 100% deterministic.
+- **Settlement Q&A agent (`engine/qa.py`, `GET /api/ask`)** — free-form questions
+  about the current batch ("which orders have the largest fee drift?"),
+  answered strictly from the already-computed report data. Claude is told
+  explicitly to say so if the data doesn't contain the answer, rather than
+  extrapolate.
 - **Command palette (⌘K in the frontend)** — jump to any order by ID or amount
   without scrolling the ledger.
 - **Audit CSV export** — one-click download of the full exception list for

@@ -483,6 +483,48 @@
     background-color: var(--panel);
   }
 
+  /* ---------- Q&A SECTION ---------- */
+  .qa {
+    padding: 56px 48px;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--panel);
+  }
+  .qa-box { max-width: 720px; margin-top: 28px; }
+  .qa-suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .qa-chip {
+    font-size: 11px;
+    color: var(--text-dim);
+    border: 1px solid var(--hairline);
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .qa-chip:hover { border-color: var(--gold); color: var(--gold); }
+  .qa-input-row { display: flex; gap: 10px; }
+  .qa-input-row input {
+    flex: 1;
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--hairline);
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  .qa-input-row input:focus { outline: none; border-color: var(--gold); }
+  .qa-answer {
+    margin-top: 20px;
+    padding: 18px 20px;
+    border: 1px solid var(--hairline);
+    background: var(--panel-raised);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text);
+    display: none;
+  }
+  .qa-answer.visible { display: block; }
+  .qa-answer .qa-label { color: var(--gold); font-size: 11px; margin-bottom: 8px; }
+  .qa-answer.loading { color: var(--text-dim); }
+
   /* ---------- CONTROL ROOM ---------- */
   .dashboard-heading {
     padding: 40px 48px 0;
@@ -774,6 +816,7 @@
     <a href="#overview">Overview</a>
     <a href="#pipeline">How it works</a>
     <a href="#forecast">Forecast</a>
+    <a href="#qa">Ask</a>
     <a href="#dashboard">Ledger</a>
   </nav>
 </header>
@@ -782,6 +825,7 @@
   <div class="side-nav-dot" data-target="overview"><span class="side-nav-label">Overview</span></div>
   <div class="side-nav-dot" data-target="pipeline"><span class="side-nav-label">How it works</span></div>
   <div class="side-nav-dot" data-target="forecast"><span class="side-nav-label">Forecast</span></div>
+  <div class="side-nav-dot" data-target="qa"><span class="side-nav-label">Ask</span></div>
   <div class="side-nav-dot" data-target="dashboard"><span class="side-nav-label">Ledger</span></div>
 </nav>
 
@@ -887,6 +931,19 @@
   </div>
   <div class="forecast-methodology reveal delay-1" id="forecastMethodology"></div>
   <div class="forecast-chart reveal delay-2" id="forecastChart"></div>
+</section>
+
+<section class="qa page" id="qa">
+  <div class="pipeline-title reveal">Ask about this batch</div>
+  <div class="pipeline-sub reveal">Free-form questions, answered only from the already-verified data above — not recomputed, not guessed.</div>
+  <div class="qa-box reveal delay-1">
+    <div class="qa-suggestions" id="qaSuggestions"></div>
+    <div class="qa-input-row">
+      <input type="text" id="qaInput" placeholder="e.g. Which orders have fee drift over ₹300?" />
+      <button id="qaSubmit">Ask</button>
+    </div>
+    <div class="qa-answer" id="qaAnswer"></div>
+  </div>
 </section>
 
 <div class="dashboard-heading reveal">
@@ -1358,6 +1415,49 @@
     if (e.target.id === 'cmdkOverlay') closeCmdk();
   });
 
+  // ---------- Q&A agent ----------
+  const QA_SUGGESTIONS = [
+    'How many orders are on hold right now?',
+    'Which orders have the largest fee drift?',
+    'Summarize the refund clawback cases.',
+    'What is the single largest unresolved exception by rupee impact?',
+  ];
+  (function initQA() {
+    el('qaSuggestions').innerHTML = QA_SUGGESTIONS.map(q =>
+      `<span class="qa-chip" data-q="${q.replace(/"/g, '&quot;')}">${q}</span>`
+    ).join('');
+    document.querySelectorAll('.qa-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        el('qaInput').value = chip.dataset.q;
+        askQuestion();
+      });
+    });
+  })();
+
+  async function askQuestion() {
+    const question = el('qaInput').value.trim();
+    if (!question) return;
+    const answerBox = el('qaAnswer');
+    answerBox.className = 'qa-answer visible loading';
+    answerBox.innerHTML = 'Asking…';
+    try {
+      const r = await fetch(`${API_BASE}/api/ask?q=${encodeURIComponent(question)}`);
+      const data = await r.json();
+      answerBox.className = 'qa-answer visible';
+      if (data.answer) {
+        answerBox.innerHTML = `<div class="qa-label">Answer</div>${data.answer.replace(/\n/g, '<br>')}`;
+      } else {
+        answerBox.innerHTML = `<div class="qa-label">Not available</div>${data.note || 'No answer returned.'}`;
+      }
+    } catch (e) {
+      answerBox.className = 'qa-answer visible';
+      answerBox.innerHTML = `<div class="qa-label">Not available</div>Could not reach the Q&A endpoint.`;
+    }
+  }
+
+  el('qaSubmit').addEventListener('click', askQuestion);
+  el('qaInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') askQuestion(); });
+
   loadReport();
 
   // ---------- marquee ticker ----------
@@ -1417,7 +1517,7 @@
 
   // ---------- side nav active-section tracking ----------
   const sideNavDots = document.querySelectorAll('.side-nav-dot');
-  const pageSections = ['overview', 'pipeline', 'forecast', 'dashboard']
+  const pageSections = ['overview', 'pipeline', 'forecast', 'qa', 'dashboard']
     .map(id => document.getElementById(id))
     .filter(Boolean);
 

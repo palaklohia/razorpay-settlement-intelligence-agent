@@ -33,6 +33,7 @@ from exceptions import classify_batch, exceptions_to_dicts  # noqa: E402
 from waterfall import build_waterfall  # noqa: E402
 from explain import explain_order  # noqa: E402
 from forecast import build_forecast  # noqa: E402
+from qa import answer_question  # noqa: E402
 
 app = FastAPI(title="Razorpay Settlement Intelligence Agent")
 
@@ -69,8 +70,7 @@ def health():
     return {"status": "ok", "ai_explain_enabled": bool(os.environ.get("ANTHROPIC_API_KEY"))}
 
 
-@app.get("/api/report")
-def get_report():
+def _build_report_dict():
     results = _cache["results"]
     exceptions = _cache["exceptions"]
     if results is None:
@@ -112,6 +112,24 @@ def get_report():
         ],
         "exceptions": exceptions_to_dicts(exceptions),
     }
+
+
+@app.get("/api/report")
+def get_report():
+    return _build_report_dict()
+
+
+@app.get("/api/ask")
+def ask_question(q: str):
+    """
+    Settlement Q&A agent — answers free-form questions about the current
+    batch. Uses the same already-verified report data /api/report returns;
+    Claude answers from it, it doesn't recompute anything.
+    """
+    if not q or not q.strip():
+        raise HTTPException(400, "Query parameter 'q' is required")
+    report = _build_report_dict()
+    return answer_question(q, report)
 
 
 @app.get("/api/orders/{order_id}/waterfall")
