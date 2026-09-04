@@ -227,8 +227,5 @@ discipline this whole project is meant to demonstrate.
   Razorpay's public settlement documentation; a production version would
   need exposure to real settlement data to find categories we haven't
   thought of.
-- The forecast module (next-N-days expected cash inflow) is not yet built —
-  it would consume the same reconciled/pending/held state this engine
-  already computes.
 - Multi-currency / international-card FX legs are represented but not
   independently verified against a forex rate source.
