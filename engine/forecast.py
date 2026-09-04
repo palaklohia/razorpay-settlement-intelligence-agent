@@ -15,11 +15,13 @@ Methodology (stated plainly so it can be defended under questioning):
   - Already clean-matched or already-banked amounts are NOT included — they
     are realized cash already, not a forecast item.
 
-"Today" is taken as the day after the latest settlement_date seen in the
-batch, so the forecast always looks forward from the most recent data point.
+"Today" is the REAL current date (the server's system clock), not a date
+derived from the synthetic dataset — so the forecast window always reflects
+the actual next 7 calendar days, updating day by day regardless of when the
+underlying settlement data happens to be dated.
 """
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 from collections import defaultdict
 
 HOLD_RELEASE_WEIGHTS = {3: 0.40, 4: 0.30, 5: 0.20, 6: 0.10}
@@ -28,9 +30,7 @@ MISSING_CREDIT_WEIGHTS = {1: 0.6, 2: 0.4}
 
 def build_forecast(results, settlements_df, horizon_days: int = 7) -> dict:
     import pandas as pd
-    dates = pd.to_datetime(settlements_df["settlement_date"])
-    latest_date = dates.max()
-    today = latest_date + timedelta(days=1)
+    today = pd.Timestamp(datetime.now().date())
 
     daily = defaultdict(lambda: {"expected_amount": 0.0, "weighted_confidence_sum": 0.0, "sources": []})
 
@@ -66,7 +66,7 @@ def build_forecast(results, settlements_df, horizon_days: int = 7) -> dict:
         })
 
     return {
-        "as_of": (today - timedelta(days=1)).date().isoformat(),
+        "as_of": today.date().isoformat(),
         "horizon_days": horizon_days,
         "total_expected_inflow": round(total, 2),
         "days": days,

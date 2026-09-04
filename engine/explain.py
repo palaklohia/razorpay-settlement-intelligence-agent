@@ -67,4 +67,11 @@ Verified findings:
         narrative = "".join(block.text for block in response.content if block.type == "text")
         return {"narrative": narrative.strip(), "source": "claude", "note": None}
     except Exception as e:
-        return {"narrative": None, "source": "error", "note": f"AI explanation unavailable: {e}"}
+        error_str = str(e)
+        if "credit balance is too low" in error_str or "invalid_request_error" in error_str and "billing" in error_str.lower():
+            note = "AI explanations are temporarily unavailable (Anthropic account needs billing set up). Showing the rule-based finding above instead — the reconciliation result itself is unaffected."
+        elif "rate_limit" in error_str.lower() or "429" in error_str:
+            note = "AI explanations are rate-limited right now. Showing the rule-based finding above instead."
+        else:
+            note = "AI explanation unavailable right now. Showing the rule-based finding above instead."
+        return {"narrative": None, "source": "error", "note": note}

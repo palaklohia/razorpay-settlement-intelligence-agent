@@ -8,17 +8,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #FAFAF7;
+    --bg: #F7F4EC;
     --panel: #FFFFFF;
     --panel-raised: #F3F1EA;
     --bar-fill: #F0E1BC;
-    --hairline: #E1DDD0;
+    --hairline: #DDD6C4;
     --text: #1B2033;
     --text-dim: #6B7280;
     --gold: #A9722E;
     --green: #1F7A4D;
     --coral: #B23B3B;
     --blue-dim: #4C6690;
+    --bg-pipeline: #EBEEE4;
+    --bg-forecast: #F7ECD8;
+    --hairline-pipeline: #D6DBC9;
+    --hairline-forecast: #E6D6AD;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,6 +55,21 @@
   a { color: inherit; }
 
   /* ---------- MASTHEAD ---------- */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    z-index: 30;
+    background: linear-gradient(90deg, #A9722E, #B23B3B, #4C6690, #7A8F5C, #A9722E);
+    background-size: 300% auto;
+    animation: gradientFlow 8s linear infinite;
+  }
+  @keyframes gradientFlow {
+    0% { background-position: 0% center; }
+    100% { background-position: 300% center; }
+  }
+
   .masthead {
     position: sticky;
     top: 0;
@@ -59,7 +78,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 18px 48px;
-    background: rgba(250, 250, 247, 0.92);
+    background: rgba(247, 244, 236, 0.92);
     backdrop-filter: blur(6px);
     border-bottom: 1px solid var(--hairline);
   }
@@ -270,7 +289,8 @@
   /* ---------- PIPELINE SECTION ---------- */
   .pipeline {
     padding: 56px 48px;
-    border-bottom: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline-pipeline);
+    background: var(--bg-pipeline);
   }
   .pipeline-title { font-family: 'Fraunces', serif; font-size: 26px; margin-bottom: 8px; }
   .pipeline-sub { color: var(--text-dim); font-size: 13px; margin-bottom: 36px; max-width: 520px; }
@@ -284,12 +304,17 @@
   .pipeline-stage {
     flex: 1;
     min-width: 200px;
-    border: 1px solid var(--hairline);
+    border: 1px solid var(--hairline-pipeline);
+    border-top: 3px solid var(--stage-color, var(--gold));
     padding: 22px 20px;
     background: var(--panel);
   }
+  .pipeline-stage:nth-child(1) { --stage-color: #A9722E; }
+  .pipeline-stage:nth-child(3) { --stage-color: #4C6690; }
+  .pipeline-stage:nth-child(5) { --stage-color: #7A8F5C; }
+  .pipeline-stage:nth-child(7) { --stage-color: #B23B3B; }
   .pipeline-stage + .pipeline-stage { border-left: none; }
-  .pipeline-stage-kicker { color: var(--gold); font-size: 11px; margin-bottom: 10px; }
+  .pipeline-stage-kicker { color: var(--stage-color, var(--gold)); font-size: 11px; margin-bottom: 10px; }
   .pipeline-stage-title { font-size: 14px; margin-bottom: 10px; }
   .pipeline-stage-desc { color: var(--text-dim); font-size: 12px; line-height: 1.55; }
   .pipeline-arrow {
@@ -323,8 +348,8 @@
   .marquee {
     overflow: hidden;
     white-space: nowrap;
-    border-bottom: 1px solid var(--hairline);
-    background: var(--panel-raised);
+    border-bottom: 1px solid var(--hairline-forecast);
+    background: #F0E4C4;
     padding: 10px 0;
   }
   .marquee-track {
@@ -404,7 +429,8 @@
   /* ---------- FORECAST SECTION ---------- */
   .forecast {
     padding: 56px 48px;
-    border-bottom: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline-forecast);
+    background: var(--bg-forecast);
   }
   .forecast-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; margin-bottom: 8px; }
   .forecast-total { font-family: 'Fraunces', serif; font-size: 42px; color: var(--gold); }
@@ -636,7 +662,9 @@
 
   /* ---------- SCROLL PAGING + REVEAL ---------- */
   html { scroll-snap-type: y proximity; }
-  .page { min-height: 100vh; scroll-snap-align: start; }
+  .page { scroll-snap-align: start; }
+  #overview.page { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+  #dashboard.page { min-height: 90vh; }
 
   .reveal {
     opacity: 0;
