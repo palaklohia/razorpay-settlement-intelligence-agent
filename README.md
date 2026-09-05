@@ -12,7 +12,7 @@ gross payment → refund → fee → GST on fee → TDS → transfer → net set
 produces an honest exception list with root cause, confidence, and ₹ impact
 for anything that doesn't tie out.
 
-Built for the Razorpay Buildathon (RACK 04 — AI Finance Controller).
+Built for the Razorpay Buildathon (TRACK 04 — AI Finance Controller).
 
 ## The pitch in one line
 
