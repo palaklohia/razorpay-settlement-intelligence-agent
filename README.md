@@ -1,5 +1,11 @@
 # Settlement Intelligence — AI Finance Controller for Razorpay
 
+🔗 Live Demo: https://razorpay-settlement-intelligence.vercel.app/
+
+Razorpay settlement reconciliation and financial intelligence platform
+for transaction analysis, exception detection, tax matching, and 
+settlement forecasting.
+
 Reconstructs the full Razorpay settlement waterfall for a batch of orders —
 gross payment → refund → fee → GST on fee → TDS → transfer → net settlement
 → bank credit — reconciles every leg across three independent sources, and
