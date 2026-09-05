@@ -525,6 +525,25 @@
   .qa-answer .qa-label { color: var(--gold); font-size: 11px; margin-bottom: 8px; }
   .qa-answer.loading { color: var(--text-dim); }
 
+  /* ---------- TAX MATCHER ---------- */
+  .tax { padding: 56px 48px; border-bottom: 1px solid var(--hairline); background: var(--panel); }
+  .tax-table { margin-top: 28px; border: 1px solid var(--hairline); max-width: 900px; }
+  .tax-row {
+    display: grid;
+    grid-template-columns: 140px 110px 110px 110px 1fr;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 12px;
+    align-items: center;
+  }
+  .tax-row:last-child { border-bottom: none; }
+  .tax-row.header { color: var(--text-dim); background: var(--panel-raised); font-size: 11px; }
+  .tax-status { font-size: 10px; padding: 3px 8px; border: 1px solid currentColor; display: inline-block; }
+  .tax-status.matched { color: var(--green); }
+  .tax-status.missing_invoice, .tax-status.wrong_gst_rate, .tax-status.gst_amount_mismatch { color: var(--coral); }
+  .tax-detail { color: var(--text-dim); font-size: 11px; }
+
   /* ---------- CONTROL ROOM ---------- */
   .dashboard-heading {
     padding: 40px 48px 0;
@@ -817,6 +836,7 @@
     <a href="#pipeline">How it works</a>
     <a href="#forecast">Forecast</a>
     <a href="#qa">Ask</a>
+    <a href="#tax">Tax</a>
     <a href="#dashboard">Ledger</a>
   </nav>
 </header>
@@ -826,6 +846,7 @@
   <div class="side-nav-dot" data-target="pipeline"><span class="side-nav-label">How it works</span></div>
   <div class="side-nav-dot" data-target="forecast"><span class="side-nav-label">Forecast</span></div>
   <div class="side-nav-dot" data-target="qa"><span class="side-nav-label">Ask</span></div>
+  <div class="side-nav-dot" data-target="tax"><span class="side-nav-label">Tax</span></div>
   <div class="side-nav-dot" data-target="dashboard"><span class="side-nav-label">Ledger</span></div>
 </nav>
 
@@ -946,6 +967,12 @@
   </div>
 </section>
 
+<section class="tax page" id="tax">
+  <div class="pipeline-title reveal">Tax-line matcher</div>
+  <div class="pipeline-sub reveal">Weekly GST invoices on Razorpay's own fees, checked against what the settlement report implies — a real compliance chore most teams don't automate.</div>
+  <div class="tax-table reveal delay-1" id="taxTable"></div>
+</section>
+
 <div class="dashboard-heading reveal">
   <div class="pipeline-title">Ledger &amp; "Explain this ₹"</div>
   <div class="pipeline-sub">Select any order to see exactly where the money went, one step at a time.</div>
@@ -1031,6 +1058,7 @@
     renderDistribution(currentReport.summary);
     renderLedger();
     loadForecast();
+    loadTaxMatches();
   }
 
   function animateCountUp(elNode, endValue, formatFn, duration = 900) {
@@ -1458,6 +1486,42 @@
   el('qaSubmit').addEventListener('click', askQuestion);
   el('qaInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') askQuestion(); });
 
+  // ---------- tax matcher ----------
+  async function loadTaxMatches() {
+    try {
+      const r = await fetch(`${API_BASE}/api/tax-matches`);
+      if (!r.ok) throw new Error(`tax-matches returned ${r.status}`);
+      const data = await r.json();
+      renderTaxMatches(data);
+    } catch (e) {
+      el('taxTable').innerHTML = `<div class="empty-ledger">Tax matcher unavailable (${e.message}). Restart the API server if this persists.</div>`;
+    }
+  }
+
+  function renderTaxMatches(data) {
+    const exceptionsByWeek = {};
+    (data.exceptions || []).forEach(e => { exceptionsByWeek[e.period_start] = e; });
+
+    const rows = data.weeks.map(w => {
+      const exc = exceptionsByWeek[w.period_start];
+      const invoicedGst = w.invoiced_gst != null ? inr(w.invoiced_gst) : '—';
+      return `
+        <div class="tax-row">
+          <div>${w.period_start}</div>
+          <div class="num">${inr(w.expected_gst)}</div>
+          <div class="num">${invoicedGst}</div>
+          <div><span class="tax-status ${w.status}">${w.status.replace(/_/g, ' ')}</span></div>
+          <div class="tax-detail">${exc ? exc.detail : 'Invoice matches settlement-implied GST within tolerance.'}</div>
+        </div>`;
+    }).join('');
+
+    el('taxTable').innerHTML = `
+      <div class="tax-row header">
+        <div>Week of</div><div>Expected GST</div><div>Invoiced GST</div><div>Status</div><div>Detail</div>
+      </div>
+      ${rows}`;
+  }
+
   loadReport();
 
   // ---------- marquee ticker ----------
@@ -1517,7 +1581,7 @@
 
   // ---------- side nav active-section tracking ----------
   const sideNavDots = document.querySelectorAll('.side-nav-dot');
-  const pageSections = ['overview', 'pipeline', 'forecast', 'qa', 'dashboard']
+  const pageSections = ['overview', 'pipeline', 'forecast', 'qa', 'tax', 'dashboard']
     .map(id => document.getElementById(id))
     .filter(Boolean);
 

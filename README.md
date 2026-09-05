@@ -57,6 +57,15 @@ absorbing it.
   answered strictly from the already-computed report data. Claude is told
   explicitly to say so if the data doesn't contain the answer, rather than
   extrapolate.
+- **Tax-line matcher (`engine/tax_matcher.py`, `GET /api/tax-matches`)** —
+  Razorpay's fee is itself a taxable supply, and it issues periodic GST
+  invoices on the fees it charges. This module buckets settlements by week
+  and checks the invoice for that week against what the settlement report's
+  fee/GST line items actually imply — catching a missing invoice, an invoice
+  computed at the wrong GST rate, or a GST total that doesn't match within
+  tolerance. This is the same class of manual, error-prone check a finance
+  team does before filing input tax credit claims. Fully deterministic, same
+  as the core reconciliation engine — no model involved.
 - **Command palette (⌘K in the frontend)** — jump to any order by ID or amount
   without scrolling the ledger.
 - **Audit CSV export** — one-click download of the full exception list for

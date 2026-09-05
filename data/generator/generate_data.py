@@ -292,6 +292,78 @@ class DataGenerator:
                     "narration": f"RAZORPAY SETTLEMENT {clawback_settlement_id} (refund adj.)",
                 })
 
+    # ---------- tax invoice generation ----------
+
+    def generate_tax_invoices(self):
+        """
+        Razorpay issues periodic GST tax invoices on the FEE it charges (its
+        own supply of service attracts GST). Here we bucket by week and
+        deliberately mismatch a few weeks: one invoice missing entirely, one
+        with a GST amount that doesn't match what the settlements imply, and
+        one computed at the wrong GST rate (12% instead of the correct 18%)
+        — the kind of error that genuinely happens when a rate change isn't
+        propagated correctly.
+        """
+        weekly = {}
+        for row in self.settlement_rows:
+            if row["gross_amount"] <= 0:
+                continue  # skip pure refund-clawback rows — no fee/GST on those
+            d = datetime.fromisoformat(row["settlement_date"]).date()
+            week_start = d - timedelta(days=d.weekday())
+            key = week_start.isoformat()
+            weekly.setdefault(key, {"fee": 0.0, "gst": 0.0})
+            weekly[key]["fee"] += row["fee"]
+            weekly[key]["gst"] += row["gst_on_fee"]
+
+        self.tax_invoice_rows = []
+        self.tax_anomalies = []
+
+        week_keys = sorted(weekly.keys())
+        anomaly_kinds = ["missing_invoice", "gst_amount_mismatch", "wrong_gst_rate"]
+        assigned = {}
+        shuffled = week_keys[:]
+        self.rng.shuffle(shuffled)
+        for i, kind in enumerate(anomaly_kinds):
+            if i < len(shuffled):
+                assigned[shuffled[i]] = kind
+
+        for week_start in week_keys:
+            fee_sum = money(weekly[week_start]["fee"])
+            gst_sum = money(weekly[week_start]["gst"])
+            invoice_id = self._new_id("inv")
+            kind = assigned.get(week_start)
+            period_end = (datetime.fromisoformat(week_start) + timedelta(days=6)).date().isoformat()
+
+            if kind == "missing_invoice":
+                self.tax_anomalies.append(Anomaly(
+                    week_start, "missing_invoice",
+                    f"No tax invoice issued for week of {week_start} — expected GST ~₹{gst_sum}"))
+                continue
+
+            actual_gst = gst_sum
+            rate_used = GST_ON_FEE_RATE
+            if kind == "gst_amount_mismatch":
+                actual_gst = money(gst_sum + self.rng.choice([48.5, -35.2, 61.0]))
+                self.tax_anomalies.append(Anomaly(
+                    week_start, "gst_amount_mismatch",
+                    f"Invoice GST ₹{actual_gst} vs settlement-computed GST ₹{gst_sum}"))
+            elif kind == "wrong_gst_rate":
+                rate_used = 0.12
+                actual_gst = money(fee_sum * rate_used)
+                self.tax_anomalies.append(Anomaly(
+                    week_start, "wrong_gst_rate",
+                    f"Invoice computed at {rate_used*100:.0f}% instead of the correct {GST_ON_FEE_RATE*100:.0f}%"))
+
+            self.tax_invoice_rows.append({
+                "invoice_id": invoice_id,
+                "period_start": week_start,
+                "period_end": period_end,
+                "total_fee_amount": fee_sum,
+                "total_gst_amount": actual_gst,
+                "gst_rate": rate_used,
+                "invoice_date": (datetime.fromisoformat(week_start) + timedelta(days=10)).date().isoformat(),
+            })
+
     # ---------- output ----------
 
     def write(self, out_dir: Path):
@@ -300,12 +372,14 @@ class DataGenerator:
         self._write_csv(out_dir / "payment_ledger.csv", self.payment_rows)
         self._write_csv(out_dir / "settlement_report.csv", self.settlement_rows)
         self._write_csv(out_dir / "bank_statement.csv", self.bank_rows)
+        self._write_csv(out_dir / "tax_invoice.csv", self.tax_invoice_rows)
 
         ground_truth = {
             "total_orders": self.n,
             "total_anomalies_injected": len(self.anomalies),
             "anomalies_by_type": self._count_by_kind(),
             "anomalies": [a.__dict__ for a in self.anomalies],
+            "tax_anomalies": [a.__dict__ for a in self.tax_anomalies],
         }
         with open(out_dir / "ground_truth.json", "w") as f:
             json.dump(ground_truth, f, indent=2)
@@ -313,6 +387,8 @@ class DataGenerator:
         print(f"Generated {self.n} orders -> {len(self.settlement_rows)} settlement rows, "
               f"{len(self.bank_rows)} bank rows, {len(self.anomalies)} injected anomalies.")
         print("Anomaly breakdown:", self._count_by_kind())
+        print(f"Tax invoices: {len(self.tax_invoice_rows)} issued, {len(self.tax_anomalies)} tax anomalies "
+              f"({[a.kind for a in self.tax_anomalies]})")
 
     def _count_by_kind(self):
         counts = {}
@@ -340,6 +416,7 @@ def main():
 
     gen = DataGenerator(args.records, args.seed, args.anomaly_rate)
     gen.generate()
+    gen.generate_tax_invoices()
     gen.write(Path(args.out))
 
 

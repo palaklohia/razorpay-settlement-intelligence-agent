@@ -18,6 +18,11 @@ import subprocess
 import sys
 from pathlib import Path
 
+from dotenv import load_dotenv
+load_dotenv()
+
+import pandas as pd
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -34,6 +39,7 @@ from waterfall import build_waterfall  # noqa: E402
 from explain import explain_order  # noqa: E402
 from forecast import build_forecast  # noqa: E402
 from qa import answer_question  # noqa: E402
+from tax_matcher import build_tax_reconciliation  # noqa: E402
 
 app = FastAPI(title="Razorpay Settlement Intelligence Agent")
 
@@ -44,7 +50,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-_cache = {"results": None, "orphans": None, "exceptions": None, "bank_df": None, "payments": None, "settlements_df": None}
+_cache = {"results": None, "orphans": None, "exceptions": None, "bank_df": None, "payments": None,
+          "settlements_df": None, "tax_invoice_df": None}
 
 
 def _run_engine(data_dir: Path):
@@ -55,8 +62,17 @@ def _run_engine(data_dir: Path):
     )
     results, orphans = reconcile(payments, settlements, bank)
     exceptions = classify_batch(results, orphans, bank)
+
+    tax_invoice_path = data_dir / "tax_invoice.csv"
+    if tax_invoice_path.exists():
+        tax_invoice_df = pd.read_csv(tax_invoice_path)
+    else:
+        tax_invoice_df = pd.DataFrame(columns=["invoice_id", "period_start", "period_end",
+                                                "total_fee_amount", "total_gst_amount",
+                                                "gst_rate", "invoice_date"])
+
     _cache.update({"results": results, "orphans": orphans, "exceptions": exceptions, "bank_df": bank,
-                    "payments": payments, "settlements_df": settlements})
+                    "payments": payments, "settlements_df": settlements, "tax_invoice_df": tax_invoice_df})
 
 
 @app.on_event("startup")
@@ -169,6 +185,15 @@ def get_ai_explanation(order_id: str):
     ]
     wf = build_waterfall(rec, matching)
     return explain_order(wf)
+
+
+@app.get("/api/tax-matches")
+def get_tax_matches():
+    settlements_df = _cache["settlements_df"]
+    tax_invoice_df = _cache["tax_invoice_df"]
+    if settlements_df is None:
+        raise HTTPException(500, "Engine not initialized")
+    return build_tax_reconciliation(settlements_df, tax_invoice_df)
 
 
 @app.get("/api/forecast")
