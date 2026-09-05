@@ -829,7 +829,7 @@
 <header class="masthead">
   <div class="brand">
     <span class="brand-mark">Settlement Intelligence</span>
-    <span class="brand-tag">AI Finance Controller · Razorpay Buildathon RACK 04</span>
+    <span class="brand-tag">AI Finance Controller · Razorpay Buildathon TRACK 04</span>
   </div>
   <nav class="masthead-nav">
     <a href="#overview">Overview</a>
@@ -1007,7 +1007,7 @@
 </footer>
 
 <script>
-  let API_BASE = 'http://127.0.0.1:8000';
+  let API_BASE = '';
   let currentReport = null;
   let activeOrderId = null;
   let activeFilterKind = null; // null = no filter, 'clean_match' = clean only, or an exception kind
@@ -1306,12 +1306,12 @@
   async function askAI(orderId, slotId, btn) {
     btn.disabled = true;
     const slot = document.getElementById(slotId);
-    slot.innerHTML = `<div class="ai-block"><div class="ai-loading">Asking Claude to explain this finding…</div></div>`;
+    slot.innerHTML = `<div class="ai-block"><div class="ai-loading">Generating explanation…</div></div>`;
     try {
       const r = await fetch(`${API_BASE}/api/orders/${orderId}/explain`);
       const data = await r.json();
       if (data.narrative) {
-        slot.innerHTML = `<div class="ai-block"><div class="ai-label">AI summary (Claude)</div><div class="ai-narrative">${data.narrative}</div></div>`;
+        slot.innerHTML = `<div class="ai-block"><div class="ai-label">AI summary</div><div class="ai-narrative">${data.narrative}</div></div>`;
       } else {
         slot.innerHTML = `<div class="ai-block"><div class="ai-label">AI summary</div><div class="ai-fallback">${data.note}</div></div>`;
       }
